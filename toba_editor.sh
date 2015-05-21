@@ -1,16 +1,18 @@
 #!/bin/bash
 
 if [ -z "$TOBA_ID_DESARROLLADOR" ]; then
+    echo "Notice: Se utiliza el id_desarrollador default (0)";
     TOBA_ID_DESARROLLADOR=0;
 fi
 
 if [ -z "$TOBA_PASS" ]; then
-    echo "Warning: Se utiliza el password default de toba (OjO)";
+    echo "Warning: Se utiliza el password default (toba)";
     TOBA_PASS=toba;
 fi
 
 if [ -z "$TOBA_NOMBRE_INSTALACION" ]; then
-    TOBA_NOMBRE_INSTALACION="Toba";
+	echo "Notice: Se utiliza el nombre de instalacion por default (Toba Editor)";	
+    TOBA_NOMBRE_INSTALACION="Toba Editor";
 fi
 
 echo "date.timezone=America/Argentina/Buenos_Aires" > php.ini;
