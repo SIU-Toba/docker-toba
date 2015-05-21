@@ -1,6 +1,6 @@
 web:
   #build: .
-  image: siutoba/docker-guarani
+  image: siutoba/docker-
   ports:
    - "3000:80"
   links:

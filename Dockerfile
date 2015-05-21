@@ -1,10 +1,7 @@
 FROM siutoba/docker-web:v1.1
-MAINTAINER ablanco@siu.edu.ar
+MAINTAINER smarconi@siu.edu.ar
 
-COPY gestion.sh /entrypoint.d/
-COPY autogestion.sh /entrypoint.d/
-RUN mkdir /var/local/autogestion_conf/
-COPY var/autogestion/* /var/local/autogestion_conf/
+COPY toba_editor.sh /entrypoint.d/
 
 ENV JASPER_HOST jasper
 ENV JASPER_PORT 8081
