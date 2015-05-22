@@ -15,8 +15,6 @@ if [ -z "$TOBA_NOMBRE_INSTALACION" ]; then
     TOBA_NOMBRE_INSTALACION="Toba Editor";
 fi
 
-echo "date.timezone=America/Argentina/Buenos_Aires" > php.ini;
-
 HOME_TOBA=/var/local/toba
 
 if [ -z "$(ls -A "$HOME_TOBA/instalacion")" ]; then
@@ -28,3 +26,10 @@ fi
 
 ln -s ${HOME_TOBA}/instalacion/toba.conf /etc/apache2/sites-enabled/toba.conf;
 
+#Se deja el ID del container dentro de la configuración de toba, para luego poder usarlo desde el Host
+DOCKER_CONTAINER_ID=`cat /proc/self/cgroup | grep -o  -e "docker-.*.scope" | head -n 1 | sed "s/docker-\(.*\).scope/\\1/"`
+echo "TOBA_DOCKER_ID=$DOCKER_CONTAINER_ID" > ${HOME_TOBA}/instalacion/toba_docker.env
+
+#Cada vez que se loguea por bash al container, carga las variables de entorno toba
+echo ". ${HOME_TOBA}/bin/entorno_toba_trunk.sh" > /root/.bashrc
+echo "cd ${HOME_TOBA};" >> /root/.bashrc

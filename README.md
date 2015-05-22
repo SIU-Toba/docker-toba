@@ -11,4 +11,5 @@ Hay un archivo `toba.sh` que contiene el script de instalación de toba, ante cu
 ```
 docker build -t="siutoba/docker-toba-editor" .
 ```
+Una vez hecho el push a github automáticamente se va a actualizar la imagen en el índice de [hub.docker.com](hub.docker.com)
 
