@@ -32,4 +32,6 @@ echo "TOBA_DOCKER_ID=$DOCKER_CONTAINER_ID" > ${HOME_TOBA}/instalacion/toba_docke
 
 #Cada vez que se loguea por bash al container, carga las variables de entorno toba
 echo ". ${HOME_TOBA}/bin/entorno_toba_trunk.sh" > /root/.bashrc
+echo "export TERM=xterm;" >> /root/.bashrc
 echo "cd ${HOME_TOBA};" >> /root/.bashrc
+
