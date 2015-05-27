@@ -20,8 +20,13 @@ HOME_TOBA=/var/local/toba
 if [ -z "$(ls -A "$HOME_TOBA/instalacion")" ]; then
     echo -n postgres > /tmp/clave_pg;
     echo -n ${TOBA_PASS} > /tmp/clave_toba;
-    ${HOME_TOBA}/bin/instalar -d ${TOBA_ID_DESARROLLADOR} -t 0 -h pg -p 5432 -u postgres -b toba -c /tmp/clave_pg -k /tmp/clave_toba -n ${TOBA_NOMBRE_INSTALACION};
-	chown -R www-data ${HOME_TOBA}/instalacion/i__desarrollo;
+    ${HOME_TOBA}/bin/instalar -d ${TOBA_ID_DESARROLLADOR} -t 0 -h pg -p 5432 -u postgres -b toba -c /tmp/clave_pg -k /tmp/clave_toba -n ${TOBA_NOMBRE_INSTALACION}
+    
+    #Permite a Toba guardar los logs
+	chown -R www-data ${HOME_TOBA}/instalacion/i__desarrollo
+
+    #Permite al usuario HOST editar los archivos
+	chmod -R a+w ${HOME_TOBA}/instalacion
 fi
 
 ln -s ${HOME_TOBA}/instalacion/toba.conf /etc/apache2/sites-enabled/toba.conf;
