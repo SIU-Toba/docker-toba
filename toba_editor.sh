@@ -36,7 +36,8 @@ DOCKER_CONTAINER_ID=`cat /proc/self/cgroup | grep -o  -e "docker-.*.scope" | hea
 echo "TOBA_DOCKER_ID=$DOCKER_CONTAINER_ID" > ${TOBA_INSTALACION_DIR}/toba_docker.env
 
 #Cada vez que se loguea por bash al container, carga las variables de entorno toba
-echo ". ${HOME_TOBA}/bin/entorno_toba_trunk.sh" > /root/.bashrc
+SCRIPT_ENTORNO_TOBA=`find ${HOME_TOBA}/bin/entorno_toba_*.sh`
+echo ". ${SCRIPT_ENTORNO_TOBA}" > /root/.bashrc
 echo "export TERM=xterm;" >> /root/.bashrc
 echo "cd ${HOME_TOBA};" >> /root/.bashrc
 
