@@ -7,7 +7,7 @@ y seguir las [instrucciones de instalación con Docker](https://repositorio.siu.
  * Se debe tener instalado [Docker](https://docs.docker.com/installation/)
 
 ## Build
-Hay un archivo `toba.sh` que contiene el script de instalación de toba, ante cualquier cambio a este script (o al Dockerfile), ejecutar lo siguiente para re-generar la imagen 
+Hay un archivo `toba_editor.sh` que contiene el script de instalación de toba, ante cualquier cambio a este script (o al Dockerfile), ejecutar lo siguiente para re-generar la imagen 
 ```
 docker build -t="siutoba/docker-toba-editor" .
 ```
