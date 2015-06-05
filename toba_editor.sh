@@ -30,6 +30,14 @@ fi
 
 ## Si no existe la carpeta INSTALACION, asume que hay que instalarlo
 if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
+
+    echo "Esperando 5 segundos para que levante postgres..."
+    for i in 5 4 3 2 1
+    do
+        echo "Intentando en $i.."
+        sleep 1
+    done
+
     echo -n postgres > /tmp/clave_pg;
     echo -n ${TOBA_PASS} > /tmp/clave_toba;
     ${TOBA_DIR}/bin/instalar -d ${TOBA_ID_DESARROLLADOR} -t 0 -h pg -p 5432 -u postgres -b $TOBA_BASE_NOMBRE -c /tmp/clave_pg -k /tmp/clave_toba -n ${TOBA_NOMBRE_INSTALACION}
@@ -48,7 +56,7 @@ if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
         ${TOBA_DIR}/bin/toba proyecto cargar -p $TOBA_PROYECTO -a 1 -d $TOBA_PROYECTO_DIR  $CARGAR_ALIAS
 
         # Si se define TOBA_PROYECTO_INSTALAR, se instala
-        if [ "$TOBA_PROYECTO_INSTALAR" = true ]; then
+        if [ "$TOBA_PROYECTO_INSTALAR" = True ]; then
             if [ -z "$TOBA_PROYECTO_INSTALAR_EXTRA" ]; then
                 TOBA_PROYECTO_INSTALAR_EXTRA=""
             fi
