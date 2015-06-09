@@ -57,10 +57,10 @@ if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
 
         # Si se define TOBA_PROYECTO_INSTALAR, se instala
         if [ "$TOBA_PROYECTO_INSTALAR" = True ]; then
-            if [ -z "$TOBA_PROYECTO_INSTALAR_EXTRA" ]; then
-                TOBA_PROYECTO_INSTALAR_EXTRA=""
+            if [ -z "$TOBA_PROYECTO_INSTALAR_PARAMETROS" ]; then
+                TOBA_PROYECTO_INSTALAR_PARAMETROS=""
             fi
-            ${TOBA_DIR}/bin/toba proyecto instalar -p $TOBA_PROYECTO $TOBA_PROYECTO_INSTALAR_EXTRA
+            ${TOBA_DIR}/bin/toba proyecto instalar -p $TOBA_PROYECTO $TOBA_PROYECTO_INSTALAR_PARAMETROS
         fi
     fi
 
@@ -69,6 +69,7 @@ if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
 
     #Permite al usuario HOST editar los archivos
 	chmod -R a+w ${TOBA_INSTALACION_DIR}
+
 fi
 
 ln -s ${TOBA_INSTALACION_DIR}/toba.conf /etc/apache2/sites-enabled/toba.conf;
