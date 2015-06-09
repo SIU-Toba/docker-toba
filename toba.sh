@@ -75,7 +75,8 @@ fi
 ln -s ${TOBA_INSTALACION_DIR}/toba.conf /etc/apache2/sites-enabled/toba.conf;
 
 #Se deja el ID del container dentro de la configuración de toba, para luego poder usarlo desde el Host
-DOCKER_CONTAINER_ID=`cat /proc/self/cgroup | grep -o  -e "docker-.*.scope" | head -n 1 | sed "s/docker-\(.*\).scope/\\1/"`
+#DOCKER_CONTAINER_ID=`cat /proc/self/cgroup | grep -o  -e "docker-.*.scope" | head -n 1 | sed "s/docker-\(.*\).scope/\\1/"`
+DOCKER_CONTAINER_ID=$HOSTNAME
 echo "TOBA_DOCKER_ID=$DOCKER_CONTAINER_ID" > ${TOBA_INSTALACION_DIR}/toba_docker.env
 
 #Cada vez que se loguea por bash al container, carga las variables de entorno toba
