@@ -31,19 +31,21 @@ fi
 ## Si no existe la carpeta INSTALACION, asume que hay que instalarlo
 if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
 
-    echo "Esperando 5 segundos para que levante postgres..."
-    for i in 5 4 3 2 1
-    do
-        echo "Intentando en $i.."
-        sleep 1
-    done
+	if [ -z "$DOCKER_WAIT_FOR" ]; then
+		echo "Esperando 5 segundos para que levante postgres..."
+		for i in 5 4 3 2 1
+		do
+			echo "Intentando en $i.."
+			sleep 1
+		done
+	fi
 
     echo -n postgres > /tmp/clave_pg;
     echo -n ${TOBA_PASS} > /tmp/clave_toba;
 
     find /var/local -maxdepth 3 -name composer.json -execdir composer install --no-interaction \;
 
-    ${TOBA_DIR}/bin/instalar -d ${TOBA_ID_DESARROLLADOR} -t 0 -h pg -p 5432 -u postgres -b $TOBA_BASE_NOMBRE -c /tmp/clave_pg -k /tmp/clave_toba -n ${TOBA_NOMBRE_INSTALACION}
+    ${TOBA_DIR}/bin/instalar -d ${TOBA_ID_DESARROLLADOR} -t 0 -h pg -p 5432 -u postgres -b $TOBA_BASE_NOMBRE -c /tmp/clave_pg -k /tmp/clave_toba -n ${TOBA_NOMBRE_INSTALACION} --no-interactive
 
     ## Si se define el TOBA_PROYECTO, se carga
     if [ -n "$TOBA_PROYECTO" ]; then
@@ -77,10 +79,15 @@ fi
 
 ln -s ${TOBA_INSTALACION_DIR}/toba.conf /etc/apache2/sites-enabled/toba.conf;
 
+<<<<<<< HEAD
 #Se deja el ID del container dentro de la configuraci�n de toba, para luego poder usarlo desde el Host
 #DOCKER_CONTAINER_ID=`cat /proc/self/cgroup | grep -o  -e "docker-.*.scope" | head -n 1 | sed "s/docker-\(.*\).scope/\\1/"`
 DOCKER_CONTAINER_ID=$HOSTNAME
 echo "TOBA_DOCKER_ID=$DOCKER_CONTAINER_ID" > ${TOBA_INSTALACION_DIR}/toba_docker.env
+=======
+#Se deja el ID del container dentro de la configuraci�n de toba, para luego poder usarlo desde el Host
+echo "TOBA_DOCKER_ID=$HOSTNAME" > ${TOBA_INSTALACION_DIR}/toba_docker.env
+>>>>>>> 78721d293c9798640963cb25aafed5b69173ccfc
 
 #Cada vez que se loguea por bash al container, carga las variables de entorno toba
 SCRIPT_ENTORNO_TOBA=`find ${TOBA_DIR}/bin/entorno_toba_*.sh`
