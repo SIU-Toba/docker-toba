@@ -22,7 +22,7 @@ if [ -z "$TOBA_BASE_NOMBRE" ]; then
     export TOBA_BASE_NOMBRE=toba
 fi
 if [ -z "$TOBA_INSTALACION_DIR" ]; then
-    export TOBA_INSTALACION_DIR=${TOBA_DIR}/docker-data/instalacion
+    export TOBA_INSTALACION_DIR=/var/local/docker-data/toba
 fi
 if [ -z "$TOBA_INSTANCIA" ]; then
     export TOBA_INSTANCIA=desarrollo
@@ -75,15 +75,22 @@ if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
     #Permite al usuario HOST editar los archivos
 	chmod -R a+w ${TOBA_INSTALACION_DIR}
 
+    #Publica el alias de toba
+    ln -s ${TOBA_INSTALACION_DIR}/toba.conf /etc/apache2/sites-enabled/toba.conf;
+
+    #Cada vez que se loguea por bash al container, carga las variables de entorno toba
+    SCRIPT_ENTORNO_TOBA=${TOBA_INSTALACION_DIR}/entorno_toba.env
+    echo ". ${SCRIPT_ENTORNO_TOBA}" >> /root/.bashrc
+    if [ -z "$TOBA_PROYECTO_DIR" ]; then
+        echo "cd ${TOBA_DIR};" >> /root/.bashrc
+    else
+        echo "cd ${TOBA_PROYECTO_DIR};" >> /root/.bashrc
+    fi
+
 fi
 
-ln -s ${TOBA_INSTALACION_DIR}/toba.conf /etc/apache2/sites-enabled/toba.conf;
-
-#Se deja el ID del container dentro de la configuraci�n de toba, para luego poder usarlo desde el Host
+#Se deja el ID del container dentro de la configuracion de toba, para luego poder usarlo desde el Host
 echo "TOBA_DOCKER_ID=$HOSTNAME" > ${TOBA_INSTALACION_DIR}/toba_docker.env
 
-#Cada vez que se loguea por bash al container, carga las variables de entorno toba
-SCRIPT_ENTORNO_TOBA=`find ${TOBA_DIR}/bin/entorno_toba_*.sh`
-echo ". ${SCRIPT_ENTORNO_TOBA}" >> /root/.bashrc
-echo "cd ${TOBA_INSTALACION_DIR}/../../;" >> /root/.bashrc
+
 
