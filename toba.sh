@@ -84,7 +84,6 @@ echo "TOBA_DOCKER_ID=$HOSTNAME" > ${TOBA_INSTALACION_DIR}/toba_docker.env
 
 #Cada vez que se loguea por bash al container, carga las variables de entorno toba
 SCRIPT_ENTORNO_TOBA=`find ${TOBA_DIR}/bin/entorno_toba_*.sh`
-echo ". ${SCRIPT_ENTORNO_TOBA}" > /root/.bashrc
-echo "export TERM=xterm;" >> /root/.bashrc
+echo ". ${SCRIPT_ENTORNO_TOBA}" >> /root/.bashrc
 echo "cd ${TOBA_INSTALACION_DIR}/../../;" >> /root/.bashrc
 
