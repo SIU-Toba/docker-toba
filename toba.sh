@@ -69,24 +69,24 @@ if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
         fi
     fi
 
-    #Permite a Toba guardar los logs
-	chown -R www-data ${TOBA_INSTALACION_DIR}/i__${TOBA_INSTANCIA}
+fi
 
-    #Permite al usuario HOST editar los archivos
-	chmod -R a+w ${TOBA_INSTALACION_DIR}
+#Permite a Toba guardar los logs
+chown -R www-data ${TOBA_INSTALACION_DIR}/i__${TOBA_INSTANCIA}
 
-    #Publica el alias de toba
-    ln -s ${TOBA_INSTALACION_DIR}/toba.conf /etc/apache2/sites-enabled/toba.conf;
+#Permite al usuario HOST editar los archivos
+chmod -R a+w ${TOBA_INSTALACION_DIR}
 
-    #Cada vez que se loguea por bash al container, carga las variables de entorno toba
-    SCRIPT_ENTORNO_TOBA=${TOBA_INSTALACION_DIR}/entorno_toba.env
-    echo ". ${SCRIPT_ENTORNO_TOBA}" >> /root/.bashrc
-    if [ -z "$TOBA_PROYECTO_DIR" ]; then
-        echo "cd ${TOBA_DIR};" >> /root/.bashrc
-    else
-        echo "cd ${TOBA_PROYECTO_DIR};" >> /root/.bashrc
-    fi
+#Publica el alias de toba
+ln -s ${TOBA_INSTALACION_DIR}/toba.conf /etc/apache2/sites-enabled/toba.conf;
 
+#Cada vez que se loguea por bash al container, carga las variables de entorno toba
+SCRIPT_ENTORNO_TOBA=${TOBA_INSTALACION_DIR}/entorno_toba.env
+echo ". ${SCRIPT_ENTORNO_TOBA}" >> /root/.bashrc
+if [ -z "$TOBA_PROYECTO_DIR" ]; then
+    echo "cd ${TOBA_DIR};" >> /root/.bashrc
+else
+    echo "cd ${TOBA_PROYECTO_DIR};" >> /root/.bashrc
 fi
 
 #Se deja el ID del container dentro de la configuracion de toba, para luego poder usarlo desde el Host
