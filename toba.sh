@@ -18,9 +18,6 @@ fi
 if [ -z "$TOBA_BASE_NOMBRE" ]; then
     export TOBA_BASE_NOMBRE=toba
 fi
-if [ -z "$TOBA_BASE_NOMBRE" ]; then
-    export TOBA_BASE_NOMBRE=toba
-fi
 if [ -z "$TOBA_INSTALACION_DIR" ]; then
     export TOBA_INSTALACION_DIR=/var/local/docker-data/toba
 fi
@@ -32,8 +29,8 @@ fi
 if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
 
 	if [ -z "$DOCKER_WAIT_FOR" ]; then
-		echo "Esperando 5 segundos para que levante postgres..."
-		for i in 5 4 3 2 1
+		echo "Esperando 8 segundos para que levante postgres..."
+		for i in 8 7 6 5 4 3 2 1
 		do
 			echo "Intentando en $i.."
 			sleep 1
