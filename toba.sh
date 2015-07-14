@@ -24,6 +24,18 @@ fi
 if [ -z "$TOBA_INSTANCIA" ]; then
     export TOBA_INSTANCIA=desarrollo
 fi
+if [ -z "$TOBA_USUARIO_ADMIN" ]; then
+    export TOBA_USUARIO_ADMIN=toba
+fi
+if [ -z "$TOBA_INSTALAR_EDITOR" ]; then
+    export TOBA_INSTALAR_EDITOR=True
+fi
+if [ -z "$TOBA_INSTALAR_REFERENCIA" ]; then
+    export TOBA_INSTALAR_REFERENCIA=True
+fi
+if [ -z "$TOBA_INSTALAR_USUARIOS" ]; then
+    export TOBA_INSTALAR_USUARIOS=True
+fi
 
 ## Si no existe la carpeta INSTALACION, asume que hay que instalarlo
 if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
@@ -42,9 +54,21 @@ if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
 
     find /var/local -maxdepth 3 -name composer.json -execdir composer install --no-interaction \;
 
-    ${TOBA_DIR}/bin/instalar -d ${TOBA_ID_DESARROLLADOR} -t 0 -h pg -p 5432 -u postgres -b $TOBA_BASE_NOMBRE -c /tmp/clave_pg -k /tmp/clave_toba -n ${TOBA_NOMBRE_INSTALACION} --no-interactive
+    ${TOBA_DIR}/bin/toba instalacion_silenciosa instalar -d ${TOBA_ID_DESARROLLADOR} -t 0 -h pg -p 5432 -u postgres -b $TOBA_BASE_NOMBRE -c /tmp/clave_pg -k /tmp/clave_toba -n ${TOBA_NOMBRE_INSTALACION} --no-interactive --usuario-admin ${TOBA_USUARIO_ADMIN}
 
-    ## Si se define el TOBA_PROYECTO, se carga
+    #Instala toba_editor, toba_referencia y toba_usuarios
+    if [ "$TOBA_INSTALAR_EDITOR" = True ]; then
+        ${TOBA_DIR}/bin/toba proyecto cargar -p toba_editor -a 1
+    fi
+    if [ "$TOBA_INSTALAR_USUARIOS" = True ]; then
+        ${TOBA_DIR}/bin/toba proyecto cargar -p toba_usuarios -a 1
+    fi
+    if [ "$TOBA_INSTALAR_REFERENCIA" = True ]; then
+        ${TOBA_DIR}/bin/toba proyecto cargar -p toba_referencia -a 1
+        ${TOBA_DIR}/bin/toba proyecto instalar -p toba_referencia
+    fi
+
+    ## Si se define un TOBA_PROYECTO puntual, se carga
     if [ -n "$TOBA_PROYECTO" ]; then
         if [ -z "$TOBA_PROYECTO_DIR" ]; then
             echo "Notice: Se utiliza la carpeta de proyecto por default (toba/proyectos)";
