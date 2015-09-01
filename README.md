@@ -9,7 +9,7 @@ y seguir las [instrucciones de instalación con Docker](https://repositorio.siu.
 ## Build
 Hay un archivo `toba.sh` que contiene el script de instalación de toba, ante cualquier cambio a este script (o al Dockerfile), ejecutar lo siguiente para re-generar la imagen 
 ```
-docker build -t="siutoba/docker-toba" .
+docker build -t="siutoba/docker-toba:php5.4" .
 ```
 Una vez hecho el push a github automáticamente se va a actualizar la imagen en el índice de [hub.docker.com](hub.docker.com)
 
