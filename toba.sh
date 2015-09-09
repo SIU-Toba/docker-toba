@@ -36,6 +36,15 @@ fi
 if [ -z "$TOBA_INSTALAR_USUARIOS" ]; then
     export TOBA_INSTALAR_USUARIOS=True
 fi
+if [ -z "$TOBA_BASE_HOST" ]; then
+    export TOBA_BASE_HOST=pg
+fi
+if [ -z "$TOBA_BASE_USER" ]; then
+    export TOBA_BASE_USER=postgres
+fi
+if [ -z "$TOBA_BASE_PASS" ]; then
+    export TOBA_BASE_PASS=postgres
+fi
 
 ## Si no existe la carpeta INSTALACION, asume que hay que instalarlo
 if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
@@ -49,12 +58,23 @@ if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
 		done
 	fi
 
-    echo -n postgres > /tmp/clave_pg;
+    echo -n ${TOBA_BASE_PASS} > /tmp/clave_pg;
     echo -n ${TOBA_PASS} > /tmp/clave_toba;
 
     find /var/local -maxdepth 3 -name composer.json -execdir composer install --no-interaction \;
 
-    ${TOBA_DIR}/bin/toba instalacion_silenciosa instalar -d ${TOBA_ID_DESARROLLADOR} -t 0 -h pg -p 5432 -u postgres -b $TOBA_BASE_NOMBRE -c /tmp/clave_pg -k /tmp/clave_toba -n ${TOBA_NOMBRE_INSTALACION} --no-interactive --usuario-admin ${TOBA_USUARIO_ADMIN}
+    ${TOBA_DIR}/bin/toba instalacion_silenciosa instalar \
+        -d ${TOBA_ID_DESARROLLADOR} \
+        -t 0 \
+        -h ${TOBA_BASE_HOST} \
+        -p 5432 \
+        -u ${TOBA_BASE_USER} \
+        -b ${TOBA_BASE_NOMBRE} \
+        -c /tmp/clave_pg \
+        -k /tmp/clave_toba \
+        -n ${TOBA_NOMBRE_INSTALACION} \
+        --no-interactive \
+        --usuario-admin ${TOBA_USUARIO_ADMIN}
 
     #Instala toba_editor, toba_referencia y toba_usuarios
     if [ "$TOBA_INSTALAR_EDITOR" = True ]; then
