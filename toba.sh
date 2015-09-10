@@ -21,8 +21,15 @@ fi
 if [ -z "$TOBA_INSTALACION_DIR" ]; then
     export TOBA_INSTALACION_DIR=/var/local/docker-data/toba
 fi
+if [ -z "$TOBA_ES_PRODUCCION" ]; then
+    export TOBA_ES_PRODUCCION=0
+fi
 if [ -z "$TOBA_INSTANCIA" ]; then
-    export TOBA_INSTANCIA=desarrollo
+    if [ "$TOBA_ES_PRODUCCION" == "0" ]; then
+        export TOBA_INSTANCIA=desarrollo
+    else
+        export TOBA_INSTANCIA=produccion
+    fi
 fi
 if [ -z "$TOBA_USUARIO_ADMIN" ]; then
     export TOBA_USUARIO_ADMIN=toba
@@ -45,6 +52,10 @@ fi
 if [ -z "$TOBA_BASE_PASS" ]; then
     export TOBA_BASE_PASS=postgres
 fi
+if [ -z "$TOBA_BASE_POR" ]; then
+    export TOBA_BASE_PORT=5432
+fi
+
 
 ## Si no existe la carpeta INSTALACION, asume que hay que instalarlo
 if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
@@ -65,9 +76,9 @@ if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
 
     ${TOBA_DIR}/bin/toba instalacion_silenciosa instalar \
         -d ${TOBA_ID_DESARROLLADOR} \
-        -t 0 \
+        -t ${TOBA_ES_PRODUCCION} \
         -h ${TOBA_BASE_HOST} \
-        -p 5432 \
+        -p ${TOBA_BASE_PORT} \
         -u ${TOBA_BASE_USER} \
         -b ${TOBA_BASE_NOMBRE} \
         -c /tmp/clave_pg \
