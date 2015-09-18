@@ -52,7 +52,7 @@ fi
 if [ -z "$TOBA_BASE_PASS" ]; then
     export TOBA_BASE_PASS=postgres
 fi
-if [ -z "$TOBA_BASE_POR" ]; then
+if [ -z "$TOBA_BASE_PORT" ]; then
     export TOBA_BASE_PORT=5432
 fi
 
