@@ -119,7 +119,17 @@ if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
             fi
             ${TOBA_DIR}/bin/toba proyecto instalar -p $TOBA_PROYECTO $TOBA_PROYECTO_INSTALAR_PARAMETROS
         fi
+
+        #Si existe ARAI-Registry se registra
+        if [ -f "$TOBA_PROYECTO_DIR/arai.json" ] &&  [ -n "$ARAI_REGISTRY_URL" ]; then
+            echo "Conectando con ARAI-Registry..."
+            $TOBA_PROYECTO_DIR/vendor/bin/arai-cli registry:add \
+                --maintainer-email  $ARAI_REGISTRY_MAINTAINER_EMAIL \
+                --maintainer $ARAI_REGISTRY_MAINTAINER_NAME \
+                $ARAI_REGISTRY_URL
+        fi
     fi
+
 
 fi
 
