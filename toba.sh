@@ -106,11 +106,19 @@ if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
             export TOBA_PROYECTO_DIR=${TOBA_DIR}/proyectos/${TOBA_PROYECTO}
         fi
         CARGAR_ALIAS=""
+        CARGAR_FULL_URL=""
         if [ -n "$TOBA_PROYECTO_ALIAS" ]; then
             CARGAR_ALIAS="--alias-nombre $TOBA_PROYECTO_ALIAS"
         fi
+        CARGAR_PORT=""
+        if [ -n "$DOCKER_WEB_PORT" ]; then
+            CARGAR_PORT=":$DOCKER_WEB_PORT"
+        fi
+        if [ -n "$DOCKER_CONTAINER_URL_BASE" ]; then
+            CARGAR_FULL_URL="--full-url ${DOCKER_CONTAINER_URL_BASE}${CARGAR_PORT}${TOBA_PROYECTO_ALIAS}"
+        fi
 
-        ${TOBA_DIR}/bin/toba proyecto cargar -p $TOBA_PROYECTO -a 1 -d $TOBA_PROYECTO_DIR  $CARGAR_ALIAS
+        ${TOBA_DIR}/bin/toba proyecto cargar -p $TOBA_PROYECTO -a 1 -d $TOBA_PROYECTO_DIR  $CARGAR_ALIAS $CARGAR_FULL_URL
 
         # Si se define TOBA_PROYECTO_INSTALAR, se instala
         if [ "$TOBA_PROYECTO_INSTALAR" = True ]; then
