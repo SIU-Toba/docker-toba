@@ -136,6 +136,11 @@ if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
                 --maintainer $ARAI_REGISTRY_MAINTAINER_NAME \
                 $ARAI_REGISTRY_URL
         fi
+
+        #Si existe la carpeta temporal del proyecto, le damos permisos a apache
+        if [ -d $TOBA_PROYECTO_DIR/temp ]; then
+            chown -R www-data $TOBA_PROYECTO_DIR/temp
+        fi
     fi
 
 
