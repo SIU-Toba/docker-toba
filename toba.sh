@@ -141,6 +141,10 @@ if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
         if [ -d $TOBA_PROYECTO_DIR/temp ]; then
             chown -R www-data $TOBA_PROYECTO_DIR/temp
         fi
+
+        if [ -d $TOBA_PROYECTO_DIR/www/temp ]; then
+            chown -R www-data $TOBA_PROYECTO_DIR/www/temp
+        fi        
     fi
 
 
