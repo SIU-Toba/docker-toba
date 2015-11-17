@@ -55,7 +55,9 @@ fi
 if [ -z "$TOBA_BASE_PORT" ]; then
     export TOBA_BASE_PORT=5432
 fi
-
+if [ -z "$TOBA_PROYECTO_CHEQUEA_SVN_SINCRO" ]; then
+    export TOBA_PROYECTO_CHEQUEA_SVN_SINCRO=False
+fi
 
 ## Si no existe la carpeta INSTALACION, asume que hay que instalarlo
 if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
@@ -126,6 +128,9 @@ if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
                 TOBA_PROYECTO_INSTALAR_PARAMETROS=""
             fi
             ${TOBA_DIR}/bin/toba proyecto instalar -p $TOBA_PROYECTO $TOBA_PROYECTO_INSTALAR_PARAMETROS
+            if [ "$TOBA_PROYECTO_CHEQUEA_SVN_SINCRO" = True ]; then
+                echo 'chequea_sincro_svn = 1' >> ${TOBA_INSTALACION_DIR}/instalacion.ini
+            fi
         fi
 
         #Si existe ARAI-Registry se registra
