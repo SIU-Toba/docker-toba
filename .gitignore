@@ -4,3 +4,4 @@ src
 docker-compose.yml
 menu.ini
 /nbproject/*
+.log.git

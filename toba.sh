@@ -63,12 +63,8 @@ fi
 if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
 
 	if [ -z "$DOCKER_WAIT_FOR" ]; then
-		echo "Esperando 8 segundos para que levante postgres..."
-		for i in 8 7 6 5 4 3 2 1
-		do
-			echo "Intentando en $i.."
-			sleep 1
-		done
+                #Ahora chequeo que se pueda hacer una conexion (pg_isready similar)
+                ${TOBA_DIR}/bin/connection_test $TOBA_BASE_HOST $TOBA_BASE_PORT $TOBA_BASE_USER TOBA_BASE_PASS postgres;		
 	fi
 
     echo -n ${TOBA_BASE_PASS} > /tmp/clave_pg;
