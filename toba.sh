@@ -96,59 +96,57 @@ if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
         ${TOBA_DIR}/bin/toba proyecto cargar -p toba_referencia -a 1
         ${TOBA_DIR}/bin/toba proyecto instalar -p toba_referencia
     fi
+fi
 
-    ## Si se define un TOBA_PROYECTO puntual, se carga
-    if [ -n "$TOBA_PROYECTO" ]; then
-        if [ -z "$TOBA_PROYECTO_DIR" ]; then
-            echo "Notice: Se utiliza la carpeta de proyecto por default (toba/proyectos)";
-            export TOBA_PROYECTO_DIR=${TOBA_DIR}/proyectos/${TOBA_PROYECTO}
-        fi
-        CARGAR_ALIAS=""
-        CARGAR_FULL_URL=""
-        if [ -n "$TOBA_PROYECTO_ALIAS" ]; then
-            CARGAR_ALIAS="--alias-nombre $TOBA_PROYECTO_ALIAS"
-        fi
-        CARGAR_PORT=""
-        if [ -n "$DOCKER_WEB_PORT" ]; then
-            CARGAR_PORT=":$DOCKER_WEB_PORT"
-        fi
-        if [ -n "$DOCKER_CONTAINER_URL_BASE" ]; then
-            CARGAR_FULL_URL="--full-url ${DOCKER_CONTAINER_URL_BASE}${CARGAR_PORT}${TOBA_PROYECTO_ALIAS}"
-        fi
-
-        ${TOBA_DIR}/bin/toba proyecto cargar -p $TOBA_PROYECTO -a 1 -d $TOBA_PROYECTO_DIR  $CARGAR_ALIAS $CARGAR_FULL_URL
-
-        # Si se define TOBA_PROYECTO_INSTALAR, se instala
-        if [ "$TOBA_PROYECTO_INSTALAR" = True ]; then
-            if [ -z "$TOBA_PROYECTO_INSTALAR_PARAMETROS" ]; then
-                TOBA_PROYECTO_INSTALAR_PARAMETROS=""
-            fi
-            ${TOBA_DIR}/bin/toba proyecto instalar -p $TOBA_PROYECTO $TOBA_PROYECTO_INSTALAR_PARAMETROS
-            if [ "$TOBA_PROYECTO_CHEQUEA_SVN_SINCRO" = True ]; then
-                echo 'chequea_sincro_svn = 1' >> ${TOBA_INSTALACION_DIR}/instalacion.ini
-            fi
-        fi
-
-        #Si existe ARAI-Registry se registra
-        if [ -f "$TOBA_PROYECTO_DIR/arai.json" ] &&  [ -n "$ARAI_REGISTRY_URL" ]; then
-            echo "Conectando con ARAI-Registry..."
-            $TOBA_PROYECTO_DIR/bin/arai-cli registry:add \
-                --maintainer-email  $ARAI_REGISTRY_MAINTAINER_EMAIL \
-                --maintainer $ARAI_REGISTRY_MAINTAINER_NAME \
-                $ARAI_REGISTRY_URL
-        fi
-
-        #Si existe la carpeta temporal del proyecto, le damos permisos a apache
-        if [ -d $TOBA_PROYECTO_DIR/temp ]; then
-            chown -R www-data $TOBA_PROYECTO_DIR/temp
-        fi
-
-        if [ -d $TOBA_PROYECTO_DIR/www/temp ]; then
-            chown -R www-data $TOBA_PROYECTO_DIR/www/temp
-        fi        
+## Si se define un TOBA_PROYECTO puntual y no esta cargado, se carga
+if [ -n "$TOBA_PROYECTO" ] && ! egrep -xq "^proyectos = \"[[:alpha:]*[:blank:]*,_]*$TOBA_PROYECTO[[:alpha:]*[:blank:]*,_]*\"$" ${TOBA_INSTALACION_DIR}/i__${TOBA_INSTANCIA}/instancia.ini ; then
+    if [ -z "$TOBA_PROYECTO_DIR" ]; then
+        echo "Notice: Se utiliza la carpeta de proyecto por default (toba/proyectos)";
+        export TOBA_PROYECTO_DIR=${TOBA_DIR}/proyectos/${TOBA_PROYECTO}
+    fi
+    CARGAR_ALIAS=""
+    CARGAR_FULL_URL=""
+    if [ -n "$TOBA_PROYECTO_ALIAS" ]; then
+        CARGAR_ALIAS="--alias-nombre $TOBA_PROYECTO_ALIAS"
+    fi
+    CARGAR_PORT=""
+    if [ -n "$DOCKER_WEB_PORT" ]; then
+        CARGAR_PORT=":$DOCKER_WEB_PORT"
+    fi
+    if [ -n "$DOCKER_CONTAINER_URL_BASE" ]; then
+        CARGAR_FULL_URL="--full-url ${DOCKER_CONTAINER_URL_BASE}${CARGAR_PORT}${TOBA_PROYECTO_ALIAS}"
     fi
 
+    ${TOBA_DIR}/bin/toba proyecto cargar -p $TOBA_PROYECTO -a 1 -d $TOBA_PROYECTO_DIR  $CARGAR_ALIAS $CARGAR_FULL_URL
 
+    # Si se define TOBA_PROYECTO_INSTALAR, se instala
+    if [ "$TOBA_PROYECTO_INSTALAR" = True ]; then
+        if [ -z "$TOBA_PROYECTO_INSTALAR_PARAMETROS" ]; then
+            TOBA_PROYECTO_INSTALAR_PARAMETROS=""
+        fi
+        ${TOBA_DIR}/bin/toba proyecto instalar -p $TOBA_PROYECTO $TOBA_PROYECTO_INSTALAR_PARAMETROS
+        if [ "$TOBA_PROYECTO_CHEQUEA_SVN_SINCRO" = True ]; then
+            echo 'chequea_sincro_svn = 1' >> ${TOBA_INSTALACION_DIR}/instalacion.ini
+        fi
+    fi
+
+    #Si existe ARAI-Registry se registra
+    if [ -f "$TOBA_PROYECTO_DIR/arai.json" ] &&  [ -n "$ARAI_REGISTRY_URL" ]; then
+        echo "Conectando con ARAI-Registry..."
+        $TOBA_PROYECTO_DIR/bin/arai-cli registry:add \
+            --maintainer-email  $ARAI_REGISTRY_MAINTAINER_EMAIL \
+            --maintainer $ARAI_REGISTRY_MAINTAINER_NAME \
+            $ARAI_REGISTRY_URL
+    fi
+
+    #Si existe la carpeta temporal del proyecto, le damos permisos a apache
+    if [ -d $TOBA_PROYECTO_DIR/temp ]; then
+        chown -R www-data $TOBA_PROYECTO_DIR/temp
+    fi
+
+    if [ -d $TOBA_PROYECTO_DIR/www/temp ]; then
+        chown -R www-data $TOBA_PROYECTO_DIR/www/temp
+    fi
 fi
 
 #Permite a Toba guardar los logs
