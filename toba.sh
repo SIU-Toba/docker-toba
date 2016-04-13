@@ -139,6 +139,26 @@ if [ -n "$TOBA_PROYECTO" ] && ! egrep -xq "^proyectos = \"[[:alpha:]*[:blank:]*,
             $ARAI_REGISTRY_URL
     fi
 
+    if [ -n "$TOBA_CERT_API_CLIENTE" ] && [ -f "$TOBA_CERT_API_CLIENTE" ] && [ -n "$TOBA_CERT_API_CLIENTE_KEY" ] && [ -f "$TOBA_CERT_API_CLIENTE_KEY" ]; then
+        echo "Configurando certificado SSL cliente..."
+        find "${TOBA_INSTALACION_DIR}/i__${TOBA_INSTANCIA}/p__${TOBA_PROYECTO}" -name "cliente.ini" | while read line; do
+            cat <<EOF > "$line"
+[conexion]
+;;Recuerde dejar una barra (/) al finalizar la URL
+;;to = "https://url.a.proyecto/rest/"
+auth_tipo = ssl
+;auth_usuario = usuario1
+;auth_password = CAMBIAR
+
+;Parametros para auth_tipo = ssl
+cert_file=${TOBA_CERT_API_CLIENTE}
+;cert_pwd=PASSWORDDECERT
+key_file=${TOBA_CERT_API_CLIENTE_KEY}
+;ca_cert=/path_al_certificado_CA
+EOF
+        done
+    fi
+
     #Si existe la carpeta temporal del proyecto, le damos permisos a apache
     if [ -d $TOBA_PROYECTO_DIR/temp ]; then
         chown -R www-data $TOBA_PROYECTO_DIR/temp
