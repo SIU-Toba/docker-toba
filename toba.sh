@@ -1,5 +1,4 @@
 #!/bin/bash
-
 if [ -z "$TOBA_ID_DESARROLLADOR" ]; then
     echo "Notice: Se utiliza el id_desarrollador default (0)";
     TOBA_ID_DESARROLLADOR=0;
@@ -157,6 +156,14 @@ key_file=${TOBA_CERT_API_CLIENTE_KEY}
 ;ca_cert=/path_al_certificado_CA
 EOF
         done
+    fi
+
+    if [ -n "$TOBA_API_ENCODING" ]; then
+    echo "Configurando API Server..."
+        cat <<EOF >> "${TOBA_INSTALACION_DIR}/i__${TOBA_INSTANCIA}/p__${TOBA_PROYECTO}/rest/servidor.ini"
+[settings]
+encoding="${TOBA_API_ENCODING}"
+EOF
     fi
 
     #Si existe la carpeta temporal del proyecto, le damos permisos a apache
