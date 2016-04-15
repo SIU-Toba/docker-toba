@@ -132,6 +132,7 @@ if [ -n "$TOBA_PROYECTO" ] && ! egrep -xq "^proyectos = \"[[:alpha:]*[:blank:]*,
     #Si existe ARAI-Registry se registra
     if [ -f "$TOBA_PROYECTO_DIR/arai.json" ] &&  [ -n "$ARAI_REGISTRY_URL" ]; then
         echo "Conectando con ARAI-Registry..."
+
         $TOBA_PROYECTO_DIR/bin/arai-cli registry:add \
             --maintainer-email  $ARAI_REGISTRY_MAINTAINER_EMAIL \
             --maintainer $ARAI_REGISTRY_MAINTAINER_NAME \
