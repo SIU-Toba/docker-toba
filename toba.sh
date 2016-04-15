@@ -129,16 +129,6 @@ if [ -n "$TOBA_PROYECTO" ] && ! egrep -xq "^proyectos = \"[[:alpha:]*[:blank:]*,
         fi
     fi
 
-    #Si existe ARAI-Registry se registra
-    if [ -f "$TOBA_PROYECTO_DIR/arai.json" ] &&  [ -n "$ARAI_REGISTRY_URL" ]; then
-        echo "Conectando con ARAI-Registry..."
-
-        $TOBA_PROYECTO_DIR/bin/arai-cli registry:add \
-            --maintainer-email  $ARAI_REGISTRY_MAINTAINER_EMAIL \
-            --maintainer $ARAI_REGISTRY_MAINTAINER_NAME \
-            $ARAI_REGISTRY_URL
-    fi
-
     if [ -n "$TOBA_CERT_API_CLIENTE" ] && [ -f "$TOBA_CERT_API_CLIENTE" ] && [ -n "$TOBA_CERT_API_CLIENTE_KEY" ] && [ -f "$TOBA_CERT_API_CLIENTE_KEY" ]; then
         echo "Configurando certificado SSL cliente..."
         find "${TOBA_INSTALACION_DIR}/i__${TOBA_INSTANCIA}/p__${TOBA_PROYECTO}" -name "cliente.ini" | while read line; do
@@ -165,6 +155,16 @@ EOF
 [settings]
 encoding="${TOBA_API_ENCODING}"
 EOF
+    fi
+
+    #Si existe ARAI-Registry se registra
+    if [ -f "$TOBA_PROYECTO_DIR/arai.json" ] &&  [ -n "$ARAI_REGISTRY_URL" ]; then
+        echo "Conectando con ARAI-Registry..."
+
+        $TOBA_PROYECTO_DIR/bin/arai-cli registry:add \
+            --maintainer-email  $ARAI_REGISTRY_MAINTAINER_EMAIL \
+            --maintainer $ARAI_REGISTRY_MAINTAINER_NAME \
+            $ARAI_REGISTRY_URL
     fi
 
     #Si existe la carpeta temporal del proyecto, le damos permisos a apache
