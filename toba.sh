@@ -147,6 +147,26 @@ key_file=${TOBA_CERT_API_CLIENTE_KEY}
 ;ca_cert=/path_al_certificado_CA
 EOF
         done
+        if [ "$TOBA_INSTALAR_USUARIOS" = True ]; then
+            ## Agrego el archivo cliente.ini en el proyecto toba_usuarios
+            echo "Configurando certificado SSL cliente en Toba-Usuarios..."
+            find "${TOBA_INSTALACION_DIR}/i__${TOBA_INSTANCIA}/p__toba_usuarios" -name "cliente.ini" | while read line; do
+                        cat <<EOF > "$line"
+[conexion]
+;;Recuerde dejar una barra (/) al finalizar la URL
+;;to = "https://url.a.proyecto/rest/"
+auth_tipo = ssl
+;auth_usuario = usuario1
+;auth_password = CAMBIAR
+
+;Parametros para auth_tipo = ssl
+cert_file=${TOBA_CERT_API_CLIENTE}
+;cert_pwd=PASSWORDDECERT
+key_file=${TOBA_CERT_API_CLIENTE_KEY}
+;ca_cert=/path_al_certificado_CA
+EOF
+            done
+        fi
     fi
 
     if [ -n "$TOBA_API_ENCODING" ]; then
@@ -196,6 +216,9 @@ if ! grep -q 'entorno_toba' /root/.bashrc; then
         echo "cd ${TOBA_PROYECTO_DIR};" >> /root/.bashrc
     fi
 fi
+
+#Permite que PHP pueda leer los certificados
+chown -R www-data /CAs
 
 #Se deja el ID del container dentro de la configuracion de toba, para luego poder usarlo desde el Host
 echo "TOBA_DOCKER_ID=$HOSTNAME" > ${TOBA_INSTALACION_DIR}/toba_docker.env
