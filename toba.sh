@@ -129,7 +129,7 @@ if [ -n "$TOBA_PROYECTO" ] && ! egrep -xq "^proyectos = \"[[:alpha:]*[:blank:]*,
         fi
     fi
 
-    if [ -n "$TOBA_CERT_API_CLIENTE" ] && [ -f "$TOBA_CERT_API_CLIENTE" ] && [ -n "$TOBA_CERT_API_CLIENTE_KEY" ] && [ -f "$TOBA_CERT_API_CLIENTE_KEY" ]; then
+    if [ -n "$TOBA_CERT_API_CLIENTE" ] && [ -f "$TOBA_CERT_API_CLIENTE" ] && [ -n "$TOBA_CERT_API_CLIENTE_KEY" ] && [ -f "$TOBA_CERT_API_CLIENTE_KEY" ] && [ -n "$TOBA_CA_CERT_VERIFY" ] && [ -f "$TOBA_CA_CERT_VERIFY" ] ; then
         echo "Configurando certificado SSL cliente..."
         find "${TOBA_INSTALACION_DIR}/i__${TOBA_INSTANCIA}/p__${TOBA_PROYECTO}" -name "cliente.ini" | while read line; do
             cat <<EOF > "$line"
@@ -144,7 +144,7 @@ auth_tipo = ssl
 cert_file=${TOBA_CERT_API_CLIENTE}
 ;cert_pwd=PASSWORDDECERT
 key_file=${TOBA_CERT_API_CLIENTE_KEY}
-;ca_cert=/path_al_certificado_CA
+ca_cert=${TOBA_CA_CERT_VERIFY}
 EOF
         done
         if [ "$TOBA_INSTALAR_USUARIOS" = True ]; then
@@ -163,7 +163,7 @@ auth_tipo = ssl
 cert_file=${TOBA_CERT_API_CLIENTE}
 ;cert_pwd=PASSWORDDECERT
 key_file=${TOBA_CERT_API_CLIENTE_KEY}
-;ca_cert=/path_al_certificado_CA
+ca_cert=${TOBA_CA_CERT_VERIFY}
 EOF
             done
         fi
