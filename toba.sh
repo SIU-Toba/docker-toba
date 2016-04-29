@@ -220,6 +220,24 @@ fi
 #Permite que PHP pueda leer los certificados
 chown -R www-data /CAs
 
+#Agrega el certificado de la CA al keystore del SO
+if [ -n "$TOBA_CA_CERT_VERIFY" ] && [ -f "$TOBA_CA_CERT_VERIFY" ]; then
+        #Recupero el nombre del archivo, le saco el .pem si lo tiene.. unicamente sirven .crt
+        NOMBRE_ARCHIVO=`basename ${TOBA_CA_CERT_VERIFY} '.cert.pem' `
+        if [ ! -f /usr/local/share/ca-certificates/${NOMBRE_ARCHIVO}.crt ]; then
+            echo "Copiando archivo de certificado.."
+            cp ${TOBA_CA_CERT_VERIFY} /usr/local/share/ca-certificates/${NOMBRE_ARCHIVO}.crt
+        fi
+        grep -Fxq "${NOMBRE_ARCHIVO}.crt" /etc/ca-certificates.conf
+        if [ $? != 0 ]; then
+            echo "Configurando certificados raiz.."
+            printf "%s\n" "${NOMBRE_ARCHIVO}.crt" >> /etc/ca-certificates.conf
+            update-ca-certificates --fresh
+        fi
+fi
+
+
+
 #Se deja el ID del container dentro de la configuracion de toba, para luego poder usarlo desde el Host
 echo "TOBA_DOCKER_ID=$HOSTNAME" > ${TOBA_INSTALACION_DIR}/toba_docker.env
 
