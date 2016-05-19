@@ -1,4 +1,7 @@
 #!/bin/bash
+if [ -z "$DIR_RAIZ_CA" ]; then
+    DIR_RAIZ_CA="/CAs"
+fi
 if [ -z "$TOBA_ID_DESARROLLADOR" ]; then
     echo "Notice: Se utiliza el id_desarrollador default (0)";
     TOBA_ID_DESARROLLADOR=0;
@@ -218,7 +221,7 @@ if ! grep -q 'entorno_toba' /root/.bashrc; then
 fi
 
 #Permite que PHP pueda leer los certificados
-chown -R www-data /CAs
+chown -R www-data $DIR_RAIZ_CA
 
 #Agrega el certificado de la CA al keystore del SO
 if [ -n "$TOBA_CA_CERT_VERIFY" ] && [ -f "$TOBA_CA_CERT_VERIFY" ]; then
