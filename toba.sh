@@ -1,4 +1,22 @@
 #!/bin/bash
+function fix_cert_permission()
+{
+	if [ -f "$1" ]; then
+		chown www-data $1
+		chmod o+x $1 # se agrega permisos de ejecución para others por curl
+	fi
+}
+
+function fix_permissions_certs()
+{
+	fix_cert_permission ${DOCKER_CERT_FILE}
+	fix_cert_permission ${DOCKER_KEY_FILE}
+	fix_cert_permission ${DOCKER_CHAIN_FILE}
+	fix_cert_permission ${TOBA_CERT_API_CLIENTE}
+	fix_cert_permission ${TOBA_CERT_API_CLIENTE_KEY}
+	fix_cert_permission ${TOBA_CA_CERT_VERIFY}
+}
+
 if [ -z "$DIR_RAIZ_CA" ]; then
     DIR_RAIZ_CA="/CAs"
 fi
@@ -221,7 +239,8 @@ if ! grep -q 'entorno_toba' /root/.bashrc; then
 fi
 
 #Permite que PHP pueda leer los certificados
-chown -R www-data $DIR_RAIZ_CA
+#chown -R www-data $DIR_RAIZ_CA
+fix_permissions_certs
 
 #Agrega el certificado de la CA al keystore del SO
 if [ -n "$TOBA_CA_CERT_VERIFY" ] && [ -f "$TOBA_CA_CERT_VERIFY" ]; then
