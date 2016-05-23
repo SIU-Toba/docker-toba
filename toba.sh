@@ -1,13 +1,15 @@
 #!/bin/bash
-function fix_cert_permission()
+fix_cert_permission()
 {
 	if [ -f "$1" ]; then
+	    echo "Executing chown www-data $1"
 		chown www-data $1
+		echo "Executing chmod o+x $1"
 		chmod o+x $1 # se agrega permisos de ejecución para others por curl
 	fi
 }
 
-function fix_permissions_certs()
+fix_permissions_certs()
 {
 	fix_cert_permission ${DOCKER_CERT_FILE}
 	fix_cert_permission ${DOCKER_KEY_FILE}
