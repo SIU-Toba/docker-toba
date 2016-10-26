@@ -213,9 +213,11 @@ EOF
     # Permisos de lectura y ejecucion para que Apache pueda ejecutar el codigo del proyecto
     chmod o+rx -R $TOBA_PROYECTO_DIR
     
-    # Permisos de escritura para que usando toba-editor, Apache pueda guardar el codigo del proyecto
-    chmod o+w -R $TOBA_PROYECTO_DIR/php
-    
+    # Si existe la carpeta php del proyecto, le damos permiso de escritura a apache para escribir con toba-editor
+    if [ -d $TOBA_PROYECTO_DIR/php ]; then
+        chmod o+w -R $TOBA_PROYECTO_DIR/php
+    fi
+
     #Si existe la carpeta temporal del proyecto, le damos permisos a apache
     if [ -d $TOBA_PROYECTO_DIR/temp ]; then
         chown -R www-data $TOBA_PROYECTO_DIR/temp
