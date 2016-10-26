@@ -209,7 +209,10 @@ EOF
             --maintainer $ARAI_REGISTRY_MAINTAINER_NAME \
             $ARAI_REGISTRY_URL
     fi
-
+    
+    # Permisos de lectura y ejecucion para que Apache pueda ejecutar el codigo del proyecto
+    chmod o+rx -R $TOBA_PROYECTO_DIR
+    
     #Si existe la carpeta temporal del proyecto, le damos permisos a apache
     if [ -d $TOBA_PROYECTO_DIR/temp ]; then
         chown -R www-data $TOBA_PROYECTO_DIR/temp
