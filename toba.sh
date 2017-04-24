@@ -57,13 +57,13 @@ if [ -z "$TOBA_USUARIO_ADMIN" ]; then
     export TOBA_USUARIO_ADMIN=toba
 fi
 if [ -z "$TOBA_INSTALAR_EDITOR" ]; then
-    export TOBA_INSTALAR_EDITOR=True
+    export TOBA_INSTALAR_EDITOR=true
 fi
 if [ -z "$TOBA_INSTALAR_REFERENCIA" ]; then
-    export TOBA_INSTALAR_REFERENCIA=True
+    export TOBA_INSTALAR_REFERENCIA=true
 fi
 if [ -z "$TOBA_INSTALAR_USUARIOS" ]; then
-    export TOBA_INSTALAR_USUARIOS=True
+    export TOBA_INSTALAR_USUARIOS=true
 fi
 if [ -z "$TOBA_BASE_HOST" ]; then
     export TOBA_BASE_HOST=pg
@@ -108,13 +108,13 @@ if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
         --usuario-admin ${TOBA_USUARIO_ADMIN}
 
     #Instala toba_editor, toba_referencia y toba_usuarios
-    if [ "$TOBA_INSTALAR_EDITOR" = True ]; then
+    if [ "$TOBA_INSTALAR_EDITOR" = true -o "$TOBA_INSTALAR_EDITOR" = TRUE ]; then
         ${TOBA_DIR}/bin/toba proyecto cargar -p toba_editor -a 1
     fi
-    if [ "$TOBA_INSTALAR_USUARIOS" = True ]; then
+    if [ "$TOBA_INSTALAR_USUARIOS" = true -o "$TOBA_INSTALAR_USUARIOS" = TRUE ]; then
         ${TOBA_DIR}/bin/toba proyecto cargar -p toba_usuarios -a 1
     fi
-    if [ "$TOBA_INSTALAR_REFERENCIA" = True ]; then
+    if [ "$TOBA_INSTALAR_REFERENCIA" = true -o "$TOBA_INSTALAR_REFERENCIA" = TRUE ]; then
         ${TOBA_DIR}/bin/toba proyecto cargar -p toba_referencia -a 1
         ${TOBA_DIR}/bin/toba proyecto instalar -p toba_referencia
     fi
@@ -142,12 +142,12 @@ if [ -n "$TOBA_PROYECTO" ] && ! egrep -xq "^proyectos = \"[[:alpha:]*[:blank:]*,
     ${TOBA_DIR}/bin/toba proyecto cargar -p $TOBA_PROYECTO -a 1 -d $TOBA_PROYECTO_DIR  $CARGAR_ALIAS $CARGAR_FULL_URL
 
     # Si se define TOBA_PROYECTO_INSTALAR, se instala
-    if [ "$TOBA_PROYECTO_INSTALAR" = True ]; then
+    if [ "$TOBA_PROYECTO_INSTALAR" = true -o  "$TOBA_PROYECTO_INSTALAR" = TRUE ]; then
         if [ -z "$TOBA_PROYECTO_INSTALAR_PARAMETROS" ]; then
             TOBA_PROYECTO_INSTALAR_PARAMETROS=""
         fi
         ${TOBA_DIR}/bin/toba proyecto instalar -p $TOBA_PROYECTO $TOBA_PROYECTO_INSTALAR_PARAMETROS
-        if [ "$TOBA_PROYECTO_CHEQUEA_SVN_SINCRO" = True ]; then
+        if [ "$TOBA_PROYECTO_CHEQUEA_SVN_SINCRO" = true -o "$TOBA_PROYECTO_CHEQUEA_SVN_SINCRO" = TRUE ]; then
             echo 'chequea_sincro_svn = 1' >> ${TOBA_INSTALACION_DIR}/instalacion.ini
         fi
     fi
@@ -170,7 +170,7 @@ key_file=${TOBA_CERT_API_CLIENTE_KEY}
 ca_cert=${TOBA_CA_CERT_VERIFY}
 EOF
         done
-        if [ "$TOBA_INSTALAR_USUARIOS" = True ]; then
+        if [ "$TOBA_INSTALAR_USUARIOS" = true -o "$TOBA_INSTALAR_USUARIOS" = TRUE ]; then
             ## Agrego el archivo cliente.ini en el proyecto toba_usuarios
             echo "Configurando certificado SSL cliente en Toba-Usuarios..."
             find "${TOBA_INSTALACION_DIR}/i__${TOBA_INSTANCIA}/p__toba_usuarios" -name "cliente.ini" | while read line; do
