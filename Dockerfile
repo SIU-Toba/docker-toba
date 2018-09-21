@@ -1,4 +1,4 @@
-FROM siutoba/docker-web:v1.5
+FROM siutoba/docker-web:v1.6
 MAINTAINER smarconi@siu.edu.ar
 
 COPY toba.sh /entrypoint.d/
